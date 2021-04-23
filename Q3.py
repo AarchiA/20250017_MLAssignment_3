@@ -23,10 +23,9 @@ def RegCF(theta, X, y, lmbda):
     return np.sum(t1 + t2) /(-l) 
 
 def RegG(theta, X, y, lmbda): 
-    l = len(y)
-    t = sigmoid(X,theta) - y
-    t = np.dot(temp.T, X).T / l
-    return t
+    m = X.shape[0]
+    y1 = sigmoid(X, theta)
+    return (1/m) * np.dot(X.T, y1 - y)
 
 import warnings
 warnings.filterwarnings( "ignore" )
@@ -58,7 +57,32 @@ for train_index, test_index in s.split(X, y):
     a = np.mean(pred == y_test_fold.flatten()) * 100
     accuracy_list.append(a)
     plot_y = y_test_fold
-print("-> Accuracy is : ", np.mean(np.array(accuracy_list)))
+print("-> Accuracy using Autograd is : ", np.mean(np.array(accuracy_list)))
+
+accuracy_list = []
+
+#Doing the StratifiedKFolding(c)
+s = StratifiedKFold(n_splits=4, shuffle=True, random_state=1)
+plot_y = y  
+for train_index, test_index in s.split(X, y):
+    x_train_fold, x_test_fold = X[train_index], X[test_index]
+    y_train_fold, y_test_fold = y[train_index], y[test_index]
+
+    value_lambda = 0.1
+    classes = 10
+    theta = np.zeros((classes,n)) 
+    for i in range(classes):
+        digit_class = i if i else 10
+        theta[i] = fmin_cg(f = RegCF, x0 = theta[i],  fprime = RegG, args = (x_train_fold, (y_train_fold == digit_class).flatten(), value_lambda), maxiter = 10, disp =False)
+
+    pred = np.argmax(x_test_fold @ theta.T, axis = 1)
+    pred = [e if e else 10 for e in pred]
+    a = np.mean(pred == y_test_fold.flatten()) * 100
+    accuracy_list.append(a)
+    plot_y = y_test_fold
+print("-> Accuracy without Autograd is : ", np.mean(np.array(accuracy_list)))
+
+
 confusion_matrix = [[0 for i in range(10)] for i in range(10)]
 
 for i in range(len(plot_y)):
@@ -77,16 +101,17 @@ plt.ylabel('2nd part')
 plt.colorbar();
 
 #Output
-#-> Accuracy is :  74.56904231625836
+#-> Accuracy using Autograd is :  74.56904231625836
+#-> Accuracy without Autograd is :  71.73372927493196
 #-> The confusion matrix is :
-#        0   1   2   3   4   5   6   7   8   9
-#    0   0   0   0   0   0   0   0   0   0   0
-#    1   0  34   0   0   0   0   0   0   9   1
-#    2   0   5  43   0   0   0   0   0   2   0
-#    3   0   0   0  41   0   0   0   0   5   1
-#    4   9   0   0   0  45   0   1   0   2   3
-#    5   5   0   0   2   0  42   0   0   0   1
-#    6  19   2   0   0   0   2  45   0   3   0
-#    7   0   1   1   2   0   1   0  44   8   4
-#    8   0   0   0   0   0   0   0   0  10   0
-#    9  11   4   0   1   0   0   0   0   5  35
+#    0   1   2   3   4   5   6   7   8   9
+#0   0   0   0   0   0   0   0   0   0   0
+#1  43  42   1   7   1   3   3   3  43   5
+#2   0   1  43   0   0   0   0   0   0   0
+#3   0   0   0  38   0   0   0   0   0   0
+#4   0   0   0   0  44   0   1   0   1   0
+#5   1   0   0   0   0  41   0   0   0   1
+#6   0   1   0   0   0   1  42   0   0   0
+#7   0   0   0   0   0   0   0  41   0   0
+#8   0   0   0   0   0   0   0   0   0   0
+#9   0   2   0   1   0   0   0   0   0  39
