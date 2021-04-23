@@ -1,0 +1,9 @@
+Digit 8 and Digit 0 are the most confused.
+Digit 7 is the easiest to predict as it is not getting confused.
+
+Interpretation: 
+We can see 10 digits through 10 different classes, each digit is represented by a different shade. Different classes and their instances are almost clearly grouped in clusters and are distinct.
+With the exception for the class that is confused the most, its instances are sparsely distributed over the plane and overlap other classes.
+We can see classe that are distinct and do not get confused often at the extremes.
+The contiguous classes correspond to similar digits, suggesting they are difficult to separate.
+Clusters that are close are expected to have similar graphical representation. Whereas far away clusters are not confused and are relatively easier to distinguish.

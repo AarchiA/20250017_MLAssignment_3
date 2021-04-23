@@ -1,0 +1,26 @@
+Q7
+
+Transfer learning :
+It is a way of using a already trained model on a related task.
+VGG-16 with 16 layers achieved great results on ImageNet classification challenge
+Model consist of two parts, one is the VGG blocks for extraction part and classifier part is made of fully connected layers and output layer.
+
+VGG1 :
+One block VGG consists of single convolutional layer with 32 filters followed by a max pooling layer.
+Each layer uses ReLU activation function. We can also use more blocks. 
+
+
+VGG1 with data augmentation :
+Data augmentation is used to synthetically expand the train dataset size by making some changes in the dataset's image.
+It act as a regularization technique and helps in learning features. These changes in input help in learning important features.
+
+
+References used for assignment:
+
+https://machinelearningmastery.com/
+
+https://towardsdatascience.com/
+
+https://adataanalyst.com/machine-learning/principal-component-analysis-scikit-learn/
+
+

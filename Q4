@@ -1,0 +1,19 @@
+Q4. Time and space complexity for Logistic regression learning and prediction
+
+Answer: Time complexity for learning:
+O(nd)
+Where n is number of data points
+d is the size of weight vector 
+Performing the summation operation takes  O(d)  and then iterating over all the n data points makes the time complexity to O(nd)
+
+Time complexity for prediction:
+O(d)
+Where d is the size of weight vector, once the weights and bias are learnt we just classify the data points accordingly.
+
+Space complexity for learning:
+O(nd+n+d)
+Here we have two matrices x and y of dimensions (n x d) and (n x 1) respectively, weights vector of size d and bias is order O(1)
+
+Space complexity for prediction:
+O(d)
+Once learning is done we just keep the weights and classify the points so order is size of weights matrix.
